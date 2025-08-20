@@ -1,0 +1,111 @@
+name: Continuous Integration
+
+on: [push, pull_request]
+
+jobs:
+
+  static-analysis-checks:
+    name: Static Analysis
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install management tools
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.8.4"
+
+    - name: Install task runner
+      uses: extractions/setup-just@v3
+      with:
+        just-version: 1.40.0
+
+    - name: Install dependencies
+      run: |
+        uv sync
+
+    - name: Run linting and formatting
+      run: |
+        just lint
+
+  type-checking:
+    name: Type Checking
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install management tools
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.8.4"
+
+    - name: Install task runner
+      uses: extractions/setup-just@v3
+      with:
+        just-version: 1.40.0
+
+    - name: Install dependencies
+      run: |
+        uv sync
+
+    - name: Run type-checking
+      run: just typecheck
+
+  tests:
+    name: Testing
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.11"
+          - "3.12"
+          - "3.13"
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install management tools and Python ${{ matrix.python-version }}
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.8.4"
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install task runner
+      uses: extractions/setup-just@v3
+      with:
+        just-version: 1.40.0
+
+    - name: Install dependencies
+      run: |
+        uv sync
+
+    - name: Run tests
+      run: just test
+
+  build:
+    name: Building Distributables
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install management tools
+      uses: astral-sh/setup-uv@v5
+      with:
+        version: "0.8.4"
+
+    - name: Install task runner
+      uses: extractions/setup-just@v3
+      with:
+        just-version: 1.40.0
+
+    - name: Install dependencies
+      run: |
+        uv sync
+
+    - name: Build library
+      run: just build

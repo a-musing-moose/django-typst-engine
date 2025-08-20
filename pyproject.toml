@@ -1,0 +1,70 @@
+[project]
+name = "django-typst"
+version = "0.1.0"
+description = "A Django template engine powered by Typst"
+readme = "README.md"
+authors = [
+    { name = "Jonathan Moss", email = "xirisr@gmail.com" }
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Framework :: Django :: 5.2",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Printing",
+  "Topic :: Software Development :: Libraries",
+]
+
+license = "BSD-3-Clause"
+license-files = ["LICENSE"]
+
+requires-python = ">=3.11"
+dependencies = [
+    "django>=5.2.0",
+    "tomlkit>=0.13.3",
+    "typst>=0.13.5",
+]
+
+[project.urls]
+
+Homepage = "https://github.com/a-musing-moose/django-typst-engine/"
+Repository = "https://github.com/a-musing-moose/django-typst-engine/"
+Readme = "https://github.com/a-musing-moose/django-typst-engine/blob/master/README.md"
+Documentation = "https://github.com/a-musing-moose/django-typst-engine/blob/master/README.md"
+
+[build-system]
+requires = ["uv_build>=0.8.3,<0.9.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "ipython>=9.4.0",
+    "mypy[mypyc]>=1.17.1",
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
+    "pytest-django>=4.11.1",
+    "pytest-spec>=5.0.0",
+    "ruff>=0.12.7",
+]
+
+[tool.mypy]
+strict = true
+exclude = "tests"
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = "django.*"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+addopts = "--rootdir src --spec"
+spec_header_format = "{test_case} [{module_path}]:"
