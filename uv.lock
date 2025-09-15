@@ -116,7 +116,7 @@ wheels = [
 
 [[package]]
 name = "django-typst"
-version = "0.1.0"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "django" },
@@ -292,11 +292,11 @@ wheels = [
 
 [[package]]
 name = "pytest-spec"
-version = "5.0.0"
+version = "5.1.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5b/d7/df3a3185c7071abee066ab7086bbbb88240209b7d3eca3a8b8dcd62abe03/pytest_spec-5.0.0.tar.gz", hash = "sha256:7d8a7281bd86e20b8434e6a500cb4ce361595e04b9af5c84b08a50814c629b3f", size = 1192442, upload-time = "2025-06-03T08:30:38.793Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/3e/1c/5e03ff220b4ef73fb07eb525a2bbf5d804d73bf291e1cdc0ed1f2450f1db/pytest_spec-5.1.0.tar.gz", hash = "sha256:841aef3d40b1be61351ade0b1bd8de25d74530670c55f4f95de8c6ebf3ea10cd", size = 1193372, upload-time = "2025-09-08T18:07:04.139Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fd/27/b6121a98b91b43cbc059d762010d42607e7609b8dd2bc2a9c63b8d66a98d/pytest_spec-5.0.0-py3-none-any.whl", hash = "sha256:730fa425206ab1c938b5cbeceb004b387b13bb72cb159f8ad9f63cc332ac1671", size = 14474, upload-time = "2025-06-03T08:30:37.03Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/b4/6832aa168573cce23f0177a94281b24324915d718dcd0b7685383f9c2c9b/pytest_spec-5.1.0-py3-none-any.whl", hash = "sha256:363594b7d63421caf48e4ec6f4caa6d764fac1f56186c9d200173bc97f28fcab", size = 15126, upload-time = "2025-09-08T18:07:02.443Z" },
 ]
 
 [[package]]
