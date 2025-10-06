@@ -34,7 +34,7 @@ def test_can_set_typst_font_paths_with_a_single_value():
 
 
 def test_can_tell_typst_to_ignore_system_fonts():
-    tconfig = config.TypstEngineConfig.from_options({"INGORE_SYSTEM_FONTS": True})
+    tconfig = config.TypstEngineConfig.from_options({"IGNORE_SYSTEM_FONTS": True})
     assert tconfig.ignore_system_fonts
 
 

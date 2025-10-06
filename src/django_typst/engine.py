@@ -6,51 +6,42 @@ import typing
 import tomlkit
 import typst
 from django.http.request import HttpRequest
-from django.template import Origin, TemplateDoesNotExist
-from django.template.backends.base import BaseEngine
+from django.template import Origin
+from django.template.engine import Engine
 
 from . import config
 
 UNKNOWN_SOURCE = "<unknown source>"
 
 
-class TypstEngine(BaseEngine):  # type: ignore[misc]
-    """
-    A template engine for rendering Typst templates.
-    """
-
-    app_dirname = "typst"
-
-    def __init__(self, params: dict[str, typing.Any]) -> None:
-        params = params.copy()
-        params.setdefault("NAME", "typst")
-        options = params.pop("OPTIONS", {})
-        self.config = config.TypstEngineConfig.from_options(options)
-        super().__init__(params)
+class TypstEngine(Engine):
+    def __init__(self, config: config.TypstEngineConfig, **kwargs):
+        self.config = config
+        super().__init__(**kwargs)
 
     def from_string(self, template_code: str) -> TypstTemplate:
         return TypstTemplate(
-            template_code=template_code.encode("utf-8"), config=self.config
+            source=template_code.encode(self.file_charset), config=self.config
         )
 
-    def get_template(self, template_name: str) -> TypstTemplate:
-        tried = []
-
-        for template_path in self.iter_template_filenames(template_name):
-            path = pathlib.Path(template_path)
-            origin = Origin(
-                name=path.as_posix(),
-                template_name=template_name,
+    def get_template(self, template_name):
+        """
+        Return a compiled Template object for the given template name,
+        handling template inheritance recursively.
+        """
+        template, origin = self.find_template(template_name)
+        if not hasattr(template, "render"):
+            # template needs to be compiled
+            return TypstTemplate(
+                source=template.encode(self.file_charset),
+                config=self.config,
+                origin=origin,
             )
-            tried.append((origin, template_name))
-
-            if path.exists() and path.is_file():
-                template_code = path.read_bytes()
-                return TypstTemplate(
-                    template_code=template_code, config=self.config, origin=origin
-                )
-
-        raise TemplateDoesNotExist(template_name, tried=tried, backend=self)
+        return TypstTemplate(
+            source=template.source.encode(self.file_charset),
+            config=self.config,
+            origin=origin,
+        )
 
 
 class TypstTemplate:
@@ -60,11 +51,11 @@ class TypstTemplate:
 
     def __init__(
         self,
-        template_code: bytes,
+        source: bytes,
         config: config.TypstEngineConfig,
         origin: Origin | None = None,
     ):
-        self.source = template_code
+        self.source = source
         self.config = config
         if origin is None:
             self.origin = Origin(UNKNOWN_SOURCE)

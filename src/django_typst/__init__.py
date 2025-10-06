@@ -1,5 +1,5 @@
 from . import encoding
-from .engine import TypstEngine
+from .backend import TypstEngine
 
 __all__ = ["TypstEngine"]
 

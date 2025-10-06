@@ -8,6 +8,7 @@ DEBUG = True
 
 INSTALLED_APPS = [
     "django_typst",
+    "tests.test_app",
 ]
 
 DATABASES = {
@@ -18,11 +19,17 @@ DATABASES = {
 }
 
 TEMPLATES = [
+    # A Default is always expected
     {
-        "BACKEND": "django_typst.TypstEngine",
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": False,
+    },
+    {
+        "BACKEND": "django_typst.TypstTemplate",
         "NAME": "typst",
         "DIRS": [BASE_DIR / "templates"],
-        "APP_DIRS": False,
+        "APP_DIRS": True,
         "OPTIONS": {
             "ROOT": None,
             "FONT_PATHS": [],
