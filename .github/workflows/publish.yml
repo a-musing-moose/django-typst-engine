@@ -10,7 +10,7 @@
         permissions:
           id-token: write # Required for trusted publishing
         steps:
-          - uses: actions/checkout@v5
+          - uses: actions/checkout@v6
 
           - name: Install management tools
             uses: astral-sh/setup-uv@v7
