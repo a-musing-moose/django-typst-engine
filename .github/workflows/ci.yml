@@ -12,7 +12,7 @@ jobs:
     steps:
 
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Install management tools
       uses: astral-sh/setup-uv@v7
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Install management tools
       uses: astral-sh/setup-uv@v7
@@ -62,14 +62,16 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - "3.11"
           - "3.12"
           - "3.13"
           - "3.14"
+        django-version:
+          - "5.2"
+          - "6.0"
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Install management tools and Python ${{ matrix.python-version }}
       uses: astral-sh/setup-uv@v7
@@ -86,6 +88,10 @@ jobs:
       run: |
         uv sync
 
+    - name: Install Django ${{ matrix.django-version }}
+      run: |
+        uv pip install Django==${{ matrix.django-version }}
+
     - name: Run tests
       run: just test
 
@@ -94,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v5
+      uses: actions/checkout@v6
 
     - name: Install management tools
       uses: astral-sh/setup-uv@v7

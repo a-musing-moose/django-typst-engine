@@ -1,6 +1,6 @@
 [project]
 name = "django-typst"
-version = "0.1.4"
+version = "0.1.5"
 description = "A Django template engine powered by Typst"
 readme = "README.md"
 authors = [
@@ -11,13 +11,13 @@ classifiers = [
   "Environment :: Web Environment",
   "Framework :: Django",
   "Framework :: Django :: 5.2",
+  "Framework :: Django :: 6.0",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: BSD License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -29,7 +29,7 @@ classifiers = [
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
 
-requires-python = ">=3.11,<3.15"
+requires-python = ">=3.12,<3.15"
 dependencies = [
     "django>=5.2.0",
     "tomlkit>=0.13.3",
