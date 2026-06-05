@@ -23,7 +23,7 @@ build: clean
 # Build docs
 [group('Build')]
 build-docs: clean
-    uv run mkdocs build
+    uv run zensical build
 
 
 # Static analysis
