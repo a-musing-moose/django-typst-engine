@@ -1,6 +1,6 @@
 version = 1
 revision = 3
-requires-python = ">=3.11, <3.15"
+requires-python = ">=3.12, <3.15"
 
 [[package]]
 name = "asgiref"
@@ -211,7 +211,7 @@ wheels = [
 
 [[package]]
 name = "django-typst"
-version = "0.1.5"
+version = "0.1.6"
 source = { editable = "." }
 dependencies = [
     { name = "django" },

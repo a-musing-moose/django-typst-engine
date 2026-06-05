@@ -23,7 +23,7 @@ class PdfStandard(enum.Enum):
     PDF_A_4 = "a-4"
     PDF_A_4E = "a-4e"
     PDF_A_4F = "a-4f"
-    PDF_UA_1 = "ua-1"    
+    PDF_UA_1 = "ua-1"
 
 
 @dataclasses.dataclass
