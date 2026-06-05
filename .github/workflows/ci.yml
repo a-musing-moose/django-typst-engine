@@ -20,7 +20,7 @@ jobs:
         version: ${{ env.UV_VERSION }}
 
     - name: Install task runner
-      uses: extractions/setup-just@v3
+      uses: extractions/setup-just@v4
       with:
         just-version: 1.40.0
 
@@ -45,7 +45,7 @@ jobs:
         version: ${{ env.UV_VERSION }}
 
     - name: Install task runner
-      uses: extractions/setup-just@v3
+      uses: extractions/setup-just@v4
       with:
         just-version: 1.40.0
 
@@ -80,7 +80,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install task runner
-      uses: extractions/setup-just@v3
+      uses: extractions/setup-just@v4
       with:
         just-version: 1.40.0
 
@@ -108,7 +108,7 @@ jobs:
         version: ${{ env.UV_VERSION }}
 
     - name: Install task runner
-      uses: extractions/setup-just@v3
+      uses: extractions/setup-just@v4
       with:
         just-version: 1.40.0
 
