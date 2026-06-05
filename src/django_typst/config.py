@@ -7,9 +7,23 @@ import typing
 
 
 class PdfStandard(enum.Enum):
+    PDF_1_4 = "1.4"
+    PDF_1_5 = "1.5"
+    PDF_1_6 = "1.6"
     PDF_1_7 = "1.7"
+    PDF_2_0 = "2.0"
+    PDF_A_1A = "a-1a"
+    PDF_A_1B = "a-1b"
+    PDF_A_2A = "a-2a"
     PDF_A_2B = "a-2b"
+    PDF_A_2U = "a-2u"
+    PDF_A_3A = "a-3a"
     PDF_A_3B = "a-3b"
+    PDF_A_3U = "a-3u"
+    PDF_A_4 = "a-4"
+    PDF_A_4E = "a-4e"
+    PDF_A_4F = "a-4f"
+    PDF_UA_1 = "ua-1"    
 
 
 @dataclasses.dataclass
