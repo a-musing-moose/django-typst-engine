@@ -3,13 +3,12 @@ from __future__ import annotations
 import pathlib
 import typing
 
-import tomlkit
 import typst
 from django.http.request import HttpRequest
 from django.template import Origin, TemplateDoesNotExist
 from django.template.backends.base import BaseEngine
 
-from . import config
+from . import config, encoding
 
 UNKNOWN_SOURCE = "<unknown source>"
 
@@ -98,7 +97,7 @@ class TypstTemplate:
                 font_paths=[p.as_posix() for p in self.config.font_paths],
                 ignore_system_fonts=self.config.ignore_system_fonts,
                 ppi=self.config.ppi,
-                sys_inputs={"context": tomlkit.dumps(context)},
+                sys_inputs={"context": encoding.TomlContextEncoder().encode(context)},
                 pdf_standards=self.config.pdf_standard.value,
             ),
         )

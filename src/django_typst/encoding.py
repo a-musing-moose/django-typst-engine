@@ -5,7 +5,6 @@ import uuid
 
 import tomlkit
 from django import http
-from tomlkit import exceptions, items
 
 
 class EncoderCannotHandleValue(Exception):
@@ -89,36 +88,14 @@ def register_default_value_encoders(encoder: ContextEncoder) -> None:
     encoder.register_encoder(request_value_encoder)
 
 
-def _stringable_encoder(o: typing.Any) -> items.Item:
+class TomlContextEncoder(ContextEncoder):
     """
-    A tomlkit encoder for objects that should just be serialized as strings
+    Serialize a Django template context as TOML.
     """
-    if isinstance(o, (decimal.Decimal, uuid.UUID)):
-        return items.String.from_raw(str(o))
-    raise exceptions.ConvertError
 
+    def __init__(self) -> None:
+        super().__init__()
+        register_default_value_encoders(self)
 
-def _request_encoder(o: typing.Any) -> items.Item:
-    """
-    A tomlkit encoder for the Django HttpRequest object
-    """
-    if isinstance(o, http.HttpRequest):
-        encoded_request = tomlkit.table()
-        encoded_request.update(
-            {
-                "path": o.path,
-                "path_info": o.path_info,
-                "method": o.method,
-                "content_type": o.content_type,
-                "content_params": o.content_params,
-                "headers": {k: v for k, v in o.headers.items()},
-                # TODO: Add GET/POST/META
-            }
-        )
-        return encoded_request
-    raise exceptions.ConvertError
-
-
-def register_encoders() -> None:
-    tomlkit.register_encoder(_stringable_encoder)
-    tomlkit.register_encoder(_request_encoder)
+    def encode(self, context: dict[str, typing.Any]) -> str:
+        return tomlkit.dumps(self.encode_value(context))
