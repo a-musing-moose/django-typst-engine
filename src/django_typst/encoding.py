@@ -6,6 +6,7 @@ import typing
 import uuid
 
 import tomlkit
+import yaml
 from django import http
 
 
@@ -124,3 +125,17 @@ class JsonContextEncoder(ContextEncoder):
 
     def encode(self, context: dict[str, typing.Any]) -> str:
         return json.dumps(self.encode_value(context))
+
+
+class YamlContextEncoder(ContextEncoder):
+    """
+    Serialize a Django template context as YAML.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        register_default_value_encoders(self)
+        self.register_encoder(isoformat_value_encoder)
+
+    def encode(self, context: dict[str, typing.Any]) -> str:
+        return yaml.safe_dump(self.encode_value(context), sort_keys=False)

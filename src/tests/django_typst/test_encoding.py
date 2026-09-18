@@ -5,6 +5,7 @@ import uuid
 
 import pytest
 import tomlkit
+import yaml
 
 from django_typst import encoding
 
@@ -158,3 +159,37 @@ def test_json_context_encoder_can_register_a_custom_value_encoder():
     encoded = json.loads(context_encoder.encode({"widget": Widget("abc-123")}))
 
     assert encoded == {"widget": "abc-123"}
+
+
+def test_yaml_context_encoder_serializes_supported_value_types():
+    context_encoder = encoding.YamlContextEncoder()
+
+    encoded = yaml.safe_load(
+        context_encoder.encode(
+            {
+                "name": "J Moss",
+                "quantity": 3,
+                "price": 12.99,
+                "decimal": decimal.Decimal("12.99"),
+                "identifier": uuid.UUID("0c997d1c-080d-4b08-9d78-5922b3b75379"),
+                "date": datetime.date(2026, 9, 18),
+                "time": datetime.time(9, 30),
+                "datetime": datetime.datetime(2026, 9, 18, 9, 30, tzinfo=datetime.UTC),
+                "items": ["one", 2],
+                "metadata": {"published": True},
+            }
+        )
+    )
+
+    assert encoded == {
+        "name": "J Moss",
+        "quantity": 3,
+        "price": 12.99,
+        "decimal": "12.99",
+        "identifier": "0c997d1c-080d-4b08-9d78-5922b3b75379",
+        "date": "2026-09-18",
+        "time": "09:30:00",
+        "datetime": "2026-09-18T09:30:00+00:00",
+        "items": ["one", 2],
+        "metadata": {"published": True},
+    }
