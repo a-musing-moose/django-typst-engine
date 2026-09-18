@@ -1,5 +1,7 @@
+import csv
 import datetime
 import decimal
+import io
 import json
 import uuid
 
@@ -193,3 +195,58 @@ def test_yaml_context_encoder_serializes_supported_value_types():
         "items": ["one", 2],
         "metadata": {"published": True},
     }
+
+
+def test_csv_context_encoder_serializes_tabular_value_types():
+    context_encoder = encoding.CsvContextEncoder()
+
+    encoded = list(
+        csv.DictReader(
+            io.StringIO(
+                context_encoder.encode(
+                    [
+                        {
+                            "name": "J Moss",
+                            "quantity": 3,
+                            "price": 12.99,
+                            "decimal": decimal.Decimal("12.99"),
+                            "identifier": uuid.UUID(
+                                "0c997d1c-080d-4b08-9d78-5922b3b75379"
+                            ),
+                            "date": datetime.date(2026, 9, 18),
+                            "time": datetime.time(9, 30),
+                            "datetime": datetime.datetime(
+                                2026, 9, 18, 9, 30, tzinfo=datetime.UTC
+                            ),
+                        }
+                    ]
+                )
+            )
+        )
+    )
+
+    assert encoded == [
+        {
+            "name": "J Moss",
+            "quantity": "3",
+            "price": "12.99",
+            "decimal": "12.99",
+            "identifier": "0c997d1c-080d-4b08-9d78-5922b3b75379",
+            "date": "2026-09-18",
+            "time": "09:30:00",
+            "datetime": "2026-09-18T09:30:00+00:00",
+        }
+    ]
+
+
+@pytest.mark.parametrize(
+    "context, exception",
+    [
+        pytest.param({"name": "J Moss"}, TypeError, id="non-tabular-root"),
+        pytest.param([{"name": "J Moss"}, {"title": "Ms"}], ValueError, id="fields"),
+        pytest.param([{"name": ["J Moss"]}], TypeError, id="nested-value"),
+    ],
+)
+def test_csv_context_encoder_rejects_non_tabular_context(context, exception):
+    with pytest.raises(exception):
+        encoding.CsvContextEncoder().encode(context)

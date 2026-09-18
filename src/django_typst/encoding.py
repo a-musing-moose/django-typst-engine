@@ -1,6 +1,8 @@
 import abc
+import csv
 import datetime
 import decimal
+import io
 import json
 import typing
 import uuid
@@ -139,3 +141,39 @@ class YamlContextEncoder(ContextEncoder):
 
     def encode(self, context: dict[str, typing.Any]) -> str:
         return yaml.safe_dump(self.encode_value(context), sort_keys=False)
+
+
+class CsvContextEncoder(ContextEncoder):
+    """
+    Serialize a tabular context as CSV.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        register_default_value_encoders(self)
+        self.register_encoder(isoformat_value_encoder)
+
+    def encode(self, context: dict[str, typing.Any]) -> str:
+        if not isinstance(context, list):
+            raise TypeError("CSV context must be a list of mappings")
+        if not context:
+            return ""
+
+        rows = typing.cast(list[dict[str, typing.Any]], self.encode_value(context))
+        fieldnames = list(rows[0])
+        if not all(isinstance(fieldname, str) for fieldname in fieldnames):
+            raise TypeError("CSV context field names must be strings")
+
+        for row in rows:
+            if not isinstance(row, dict):
+                raise TypeError("CSV context rows must be mappings")
+            if set(row) != set(fieldnames):
+                raise ValueError("CSV context rows must have matching fields")
+            if any(isinstance(value, (dict, list)) for value in row.values()):
+                raise TypeError("CSV context values must be scalar")
+
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+        return output.getvalue()
