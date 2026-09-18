@@ -4,7 +4,12 @@ import pytest
 import tomlkit
 from django.template import Origin, TemplateDoesNotExist
 
-from django_typst import config, engine
+from django_typst import config, encoding, engine
+
+
+class StubContextEncoder(encoding.ContextEncoder):
+    def encode(self, context):
+        return "encoded context"
 
 # Engine Tests
 
@@ -148,3 +153,17 @@ def test_request_is_passed_to_typst_if_supplied(monkeypatch, rf):
     context = tomlkit.loads(sys_input["context"])
     assert "request" in context
     assert isinstance(context["request"], dict)
+
+
+def test_template_uses_the_configured_context_encoder(monkeypatch):
+    template_code = b"= Whoop, Whoop!"
+    engine_config = config.TypstEngineConfig.from_options(
+        {"CONTEXT_ENCODER": f"{__name__}.StubContextEncoder"}
+    )
+    template = engine.TypstTemplate(template_code=template_code, config=engine_config)
+    mock_compile = mock.Mock(return_value=b"")
+    monkeypatch.setattr(engine.typst, "compile", mock_compile)
+
+    template.render({"name": "J Moss"})
+
+    assert mock_compile.call_args.kwargs["sys_inputs"] == {"context": "encoded context"}

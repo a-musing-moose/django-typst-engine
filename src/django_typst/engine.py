@@ -8,7 +8,7 @@ from django.http.request import HttpRequest
 from django.template import Origin, TemplateDoesNotExist
 from django.template.backends.base import BaseEngine
 
-from . import config, encoding
+from . import config
 
 UNKNOWN_SOURCE = "<unknown source>"
 
@@ -97,7 +97,7 @@ class TypstTemplate:
                 font_paths=[p.as_posix() for p in self.config.font_paths],
                 ignore_system_fonts=self.config.ignore_system_fonts,
                 ppi=self.config.ppi,
-                sys_inputs={"context": encoding.TomlContextEncoder().encode(context)},
+                sys_inputs={"context": self.config.context_encoder.encode(context)},
                 pdf_standards=self.config.pdf_standard.value,
             ),
         )

@@ -5,6 +5,10 @@ import enum
 import pathlib
 import typing
 
+from django.utils.module_loading import import_string
+
+from . import encoding
+
 
 class PdfStandard(enum.Enum):
     PDF_1_4 = "1.4"
@@ -33,6 +37,7 @@ class TypstEngineConfig:
     ignore_system_fonts: bool
     pdf_standard: PdfStandard
     ppi: int | None
+    context_encoder: encoding.ContextEncoder
 
     @classmethod
     def from_options(cls, options: dict[str, typing.Any]) -> TypstEngineConfig:
@@ -57,10 +62,23 @@ class TypstEngineConfig:
         if ppi_option := options.get("PPI", None):
             ppi = int(ppi_option)
 
+        context_encoder_class: type[encoding.ContextEncoder] = (
+            encoding.TomlContextEncoder
+        )
+        if context_encoder_option := options.get("CONTEXT_ENCODER", None):
+            imported_encoder = import_string(typing.cast(str, context_encoder_option))
+            if not (
+                isinstance(imported_encoder, type)
+                and issubclass(imported_encoder, encoding.ContextEncoder)
+            ):
+                raise TypeError("CONTEXT_ENCODER must be a ContextEncoder subclass")
+            context_encoder_class = imported_encoder
+
         return cls(
             root=root,
             font_paths=font_paths,
             ignore_system_fonts=ignore_system_fonts,
             pdf_standard=pdf_standard,
             ppi=ppi,
+            context_encoder=context_encoder_class(),
         )
