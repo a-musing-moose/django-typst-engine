@@ -1,18 +1,30 @@
 import pytest
 
-from django_typst import config
+from django_typst import config, encoding
+
+
+class StubContextEncoder(encoding.ContextEncoder):
+    def encode(self, context):
+        return "stub"
 
 
 def test_can_create_config_when_options_is_empty():
     tconfig = config.TypstEngineConfig.from_options(options={})
 
-    assert tconfig == config.TypstEngineConfig(
-        root=None,
-        font_paths=[],
-        ignore_system_fonts=False,
-        pdf_standard=config.PdfStandard.PDF_1_7,
-        ppi=None,
+    assert tconfig.root is None
+    assert tconfig.font_paths == []
+    assert tconfig.ignore_system_fonts is False
+    assert tconfig.pdf_standard == config.PdfStandard.PDF_1_7
+    assert tconfig.ppi is None
+    assert isinstance(tconfig.context_encoder, encoding.TomlContextEncoder)
+
+
+def test_can_configure_a_context_encoder():
+    tconfig = config.TypstEngineConfig.from_options(
+        {"CONTEXT_ENCODER": f"{__name__}.StubContextEncoder"}
     )
+
+    assert isinstance(tconfig.context_encoder, StubContextEncoder)
 
 
 def test_can_set_a_typst_root():

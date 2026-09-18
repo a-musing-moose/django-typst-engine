@@ -5,8 +5,8 @@ files.
 
 ## Installation and Configuration
 
-The Django Typst engine is available from PyPI so you can install it with all the
-usual tools:
+The Django Typst engine is available from PyPI so you can install it with all the usual
+tools:
 
 ```shell
 pip install django_typst
@@ -21,7 +21,7 @@ Once installed, to make the Typst engine available, you need to add it to the
 
 ```python
 TEMPLATES = [
-    ...
+    …
     {
         "BACKEND": "django_typst.TypstEngine",
         "NAME": "typst",
@@ -33,6 +33,7 @@ TEMPLATES = [
             "IGNORE_SYSTEM_FONTS": False,
             "PDF_STANDARD": "1.7",
             "PPI": None,
+            "CONTEXT_ENCODER": "django_typst.encoding.TomlContextEncoder",
         }
     },
 ]
@@ -41,8 +42,8 @@ TEMPLATES = [
 Note that this should be in _addition_ to the standard Django template engine that was
 already there.
 
-All the `OPTIONS` are... optional and the values above represent their defaults should
-no alternative be provided.
+All the `OPTIONS` are… optional and the values above represent their defaults should no
+alternative be provided.
 
 | Option              | Description                                    | Default  |
 | ------------------- | ---------------------------------------------- | -------- |
@@ -51,16 +52,24 @@ no alternative be provided.
 | IGNORE_SYSTEM_FONTS | Only consider fonts in the defined font paths  | `False`  |
 | PDF_STANDARD        | PDF revision to target (`1.7`, `a2-b`, `a3-b`) | `"1.7"`  |
 | PPI                 | Pixel Per Inch for included PNG                | `None`   |
+| CONTEXT_ENCODER     | Dotted path to the context encoder class       | TOML     |
 
-\* _The engine with use the folder the template is in as the root if one is not
+\* _The engine with use the folder the template is in as the root if one isn't
 specified._
+
+`CONTEXT_ENCODER` controls how Django context data is transferred to Typst. The
+default TOML encoder maintains compatibility with earlier releases. Built-in
+alternatives are `django_typst.encoding.JsonContextEncoder`,
+`django_typst.encoding.YamlContextEncoder`, and
+`django_typst.encoding.CsvContextEncoder`. See [handling context][context] for
+the matching Typst template setup and format limitations.
 
 !!! note
 
-    The Django Typst Engine does support loading templates from app dirs with the
-    `APP_DIR` configuration, but just like the jinja2 engine, it expects the in-app
-    folder to have an engine specific name of `typst`. So if you want to have templates
-    in app directories, please ensure they sit within a folder called `typst`.
+    The Django Typst Engine does support loading templates from app dirs with the `APP_DIR`
+    configuration, but just like the jinja2 engine, it expects the in-app folder to have an
+    engine specific name of `typst`. So if you want to have templates in app directories,
+    please ensure they sit within a folder called `typst`.
 
 ## Usage
 
@@ -77,10 +86,11 @@ class MyTemplateView(generic.TemplateView):
   template_engine = "typst"
   content_type = "application/pdf"
 
-  ...
+  …
 ```
 
 <!-- Links -->
 
 [django]: https://www.djangoproject.com/
 [typst]: https://typst.app/
+[context]: guides/context.md

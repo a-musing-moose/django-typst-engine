@@ -135,6 +135,7 @@ version = "0.1.6"
 source = { editable = "." }
 dependencies = [
     { name = "django" },
+    { name = "pyyaml" },
     { name = "tomlkit" },
     { name = "typst" },
 ]
@@ -147,6 +148,7 @@ dev = [
     { name = "pytest-django" },
     { name = "pytest-spec" },
     { name = "ruff" },
+    { name = "types-pyyaml" },
 ]
 docs = [
     { name = "zensical" },
@@ -155,6 +157,7 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "django", specifier = ">=5.2.0" },
+    { name = "pyyaml", specifier = ">=6.0.3" },
     { name = "tomlkit", specifier = ">=0.15.1" },
     { name = "typst", specifier = ">=0.15.0" },
 ]
@@ -167,6 +170,7 @@ dev = [
     { name = "pytest-django", specifier = ">=4.11.1" },
     { name = "pytest-spec", specifier = ">=6.1.0" },
     { name = "ruff", specifier = ">=0.16.1" },
+    { name = "types-pyyaml", specifier = ">=6.0.12.20260906" },
 ]
 docs = [{ name = "zensical", specifier = ">=0.0.44" }]
 
@@ -603,6 +607,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/94/96/e07752635b98536177fa1f37671c8f3cdde2e724c6bcf6034b2cfb571565/tomlkit-0.15.1.tar.gz", hash = "sha256:e25bbf38843005246210a12982776f27f99cb9be67160e14434d0c0d21ee1e97", size = 180129, upload-time = "2026-07-17T01:48:04.562Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/13/bc/8c13eb66537dce1d2bd3a57132902f38d0e7f5bb46fa9f4daed9fe9d76ee/tomlkit-0.15.1-py3-none-any.whl", hash = "sha256:177a05aece5a8ca5266fd3c448abb47b8d352f09d477d3ca8332db4d89b24304", size = 49449, upload-time = "2026-07-17T01:48:05.728Z" },
+]
+
+[[package]]
+name = "types-pyyaml"
+version = "6.0.12.20260906"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/90/6e/abec85b9013db5b934b0280a6dd104904d84f7bcbaab2e2f3def87ac7463/types_pyyaml-6.0.12.20260906.tar.gz", hash = "sha256:f59c1cc05010b833d2d72287bbaa72610106b28d42d89a907313117faba85212", size = 18649, upload-time = "2026-09-06T06:35:35.362Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/15/c0/fc0644b7ddcfb969e95845837143cb5173ddd6e06ee4ba5fc493cd9329b7/types_pyyaml-6.0.12.20260906-py3-none-any.whl", hash = "sha256:bca893ff0d51df5c9053137d5d0e6ccd36e939a196356f1d5c16372422f5137b", size = 21282, upload-time = "2026-09-06T06:35:34.372Z" },
 ]
 
 [[package]]

@@ -33,6 +33,7 @@ license-files = ["LICENSE"]
 requires-python = ">=3.12,<3.15"
 dependencies = [
     "django>=5.2.0",
+    "pyyaml>=6.0.3",
     "tomlkit>=0.15.1",
     "typst>=0.15.0",
 ]
@@ -56,6 +57,7 @@ dev = [
     "pytest-django>=4.11.1",
     "pytest-spec>=6.1.0",
     "ruff>=0.16.1",
+    "types-pyyaml>=6.0.12.20260906",
 ]
 docs = [
     "zensical>=0.0.44",

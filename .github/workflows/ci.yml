@@ -56,6 +56,20 @@ jobs:
     - name: Run type-checking
       run: just typecheck
 
+  documentation-linting:
+    name: Documentation Linting
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Lint the documentation
+        uses: vale-cli/vale-action@v2.1.2
+        with:
+          files: docs
+          fail_on_error: true
+          vale_flags: '--minAlertLevel=error'
+
   tests:
     name: Testing
     runs-on: ubuntu-latest
