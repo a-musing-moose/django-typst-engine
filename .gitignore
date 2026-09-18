@@ -1,22 +1,17 @@
-# Python-generated files
 __pycache__/
-.coverage
+.coverage*
+.env
 .mypy_cache
 .pytest_cache
+.python-version
+.styles/Microsoft
+.styles/proselint
+.venv
+.vscode
 *.egg-info
 *.py[oc]
 build/
 dist/
 htmlcov
-wheels/
 site/
-
-# Virtual environments
-.venv
-.python-version
-
-# IDE specific
-.vscode
-
-# Dev configuration
-.env
+wheels/

@@ -1,9 +1,9 @@
 # Handling Context
 
-Context data passed into the template is first encoded in [TOML] format. Note this
-means that only data types that can be serialized as TOML can be passed as context
-variables. We use [tomlkit] to serialize the context. In practice this means the
-following types can be included in the context:
+Context data passed into the template is first encoded in [TOML] format. Note this means
+that only data types that can be serialized as TOML can be passed as context variables.
+We use [tomlkit] to serialize the context. In practice this means the following types
+can be included in the context:
 
 - `str`
 - `int`
@@ -38,7 +38,7 @@ data by adding the following to the top of the Typst file:
 ```
 
 This will deserialize the context and assign it to the Typst variable `ctx` which can
-then be used in the template like any other variable. For example if you rcontext was
+then be used in the template like any other variable. For example if you context was
 something like:
 
 ```python
@@ -68,7 +68,7 @@ Or even better is to parse the context as follows:
 }
 ```
 
-This version sets a default if `context` is not passed in. This allows you to test the
+This version sets a default if `context` isn't passed in. This allows you to test the
 template in isolation - say with the [Tinymist] Extension to VSCode or even just running
 `typst` directly on it.
 
@@ -96,15 +96,15 @@ def widget_encoder(o: typing.Any) -> items.Item:
 tomlkit.register_encoder(widget_encoder)
 ```
 
-Note the at the end of the snippet above, there is an explicit registration of the
-new widget encoder. You must make sure that the code executes the registration before
-you can use it.
+Note the at the end of the snippet above, there is an explicit registration of the new
+widget encoder. You must make sure that the code executes the registration before you
+can use it.
 
 Take a look at [`django_typst/encoding.py`][encoding] for more examples.
 
 <!-- Links -->
 
+[encoding]: https://github.com/a-musing-moose/django-typst-engine/blob/main/src/django_typst/encoding.py
 [tinymist]: https://github.com/Myriad-Dreamin/tinymist
 [toml]: https://toml.io/en/
 [tomlkit]: https://tomlkit.readthedocs.io/en/latest/
-[encoding]: https://github.com/a-musing-moose/django-typst-engine/blob/main/src/django_typst/encoding.py

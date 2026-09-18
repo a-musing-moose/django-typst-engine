@@ -5,8 +5,8 @@ files.
 
 ## Installation and Configuration
 
-The Django Typst engine is available from PyPI so you can install it with all the
-usual tools:
+The Django Typst engine is available from PyPI so you can install it with all the usual
+tools:
 
 ```shell
 pip install django_typst
@@ -21,7 +21,7 @@ Once installed, to make the Typst engine available, you need to add it to the
 
 ```python
 TEMPLATES = [
-    ...
+    …
     {
         "BACKEND": "django_typst.TypstEngine",
         "NAME": "typst",
@@ -41,8 +41,8 @@ TEMPLATES = [
 Note that this should be in _addition_ to the standard Django template engine that was
 already there.
 
-All the `OPTIONS` are... optional and the values above represent their defaults should
-no alternative be provided.
+All the `OPTIONS` are… optional and the values above represent their defaults should no
+alternative be provided.
 
 | Option              | Description                                    | Default  |
 | ------------------- | ---------------------------------------------- | -------- |
@@ -52,15 +52,15 @@ no alternative be provided.
 | PDF_STANDARD        | PDF revision to target (`1.7`, `a2-b`, `a3-b`) | `"1.7"`  |
 | PPI                 | Pixel Per Inch for included PNG                | `None`   |
 
-\* _The engine with use the folder the template is in as the root if one is not
+\* _The engine with use the folder the template is in as the root if one isn't
 specified._
 
 !!! note
 
-    The Django Typst Engine does support loading templates from app dirs with the
-    `APP_DIR` configuration, but just like the jinja2 engine, it expects the in-app
-    folder to have an engine specific name of `typst`. So if you want to have templates
-    in app directories, please ensure they sit within a folder called `typst`.
+    The Django Typst Engine does support loading templates from app dirs with the `APP_DIR`
+    configuration, but just like the jinja2 engine, it expects the in-app folder to have an
+    engine specific name of `typst`. So if you want to have templates in app directories,
+    please ensure they sit within a folder called `typst`.
 
 ## Usage
 
@@ -77,7 +77,7 @@ class MyTemplateView(generic.TemplateView):
   template_engine = "typst"
   content_type = "application/pdf"
 
-  ...
+  …
 ```
 
 <!-- Links -->

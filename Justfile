@@ -32,6 +32,10 @@ lint:
     uv run ruff format --check src
     uv run ruff check src
 
+[group('QA')]
+docs-lint:
+    vale docs/
+
 # Check types make sense
 [group('QA')]
 typecheck:
