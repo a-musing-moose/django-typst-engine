@@ -7,7 +7,8 @@ with the matching Typst function.
 ## Interface
 
 Every encoder subclasses `django_typst.encoding.ContextEncoder` and implements
-`encode`, which accepts a context dictionary and returns a string.
+`encode`, which accepts a context value and returns a string. The TOML, JSON, and
+YAML encoders accept dictionaries. The CSV encoder accepts a list of mappings.
 
 ```python
 from django_typst.encoding import ContextEncoder
@@ -41,7 +42,8 @@ encoder.register_encoder(widget_value_encoder)
 ```
 
 Converter registrations belong to an encoder instance. Register a converter on
-the same instance that the Django template engine uses. Built-in encoders reuse
+the instance that the Django template engine uses. Configure the class with the
+`CONTEXT_ENCODER` option, which accepts a dotted class path. Built-in encoders reuse
 `register_default_value_encoders`, which provides conversions for `Decimal`,
 `UUID`, and Django `HttpRequest` objects.
 

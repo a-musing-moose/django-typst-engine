@@ -1,20 +1,37 @@
 # Handling Context
 
-Context data passed into the template is first encoded in [TOML] format. Note this means
-that only data types that can be serialized as TOML can be passed as context variables.
-We use [tomlkit] to serialize the context. In practice this means the following types
-can be included in the context:
+Context data passed into a template is serialized to a string and provided to Typst
+as `sys.inputs.context`. TOML is the default format. Set `CONTEXT_ENCODER` in the
+Django template engine options to select a different encoder class.
+
+```python
+"OPTIONS": {
+  "CONTEXT_ENCODER": "django_typst.encoding.JsonContextEncoder",
+}
+```
+
+The built-in encoder classes are:
+
+| Encoder | Typst parser | Context shape |
+| --- | --- | --- |
+| `TomlContextEncoder` | `toml(bytes(sys.inputs.context))` | Dictionary |
+| `JsonContextEncoder` | `json(bytes(sys.inputs.context))` | Dictionary |
+| `YamlContextEncoder` | `yaml(bytes(sys.inputs.context))` | Dictionary |
+| `CsvContextEncoder` | `csv(bytes(sys.inputs.context))` | List of uniform, flat mappings |
+
+All built-in encoders support the following context value types. CSV supports the
+scalar entries only because each value occupies one table cell.
 
 - `str`
 - `int`
 - `float`
-- `bool`
 - `datetime.datetime`, `.time`, and `.date`
 - `list`
 - `dict`
 
-In addition to these types, you can also include `decimal.Decimal`, `uuid.UUID` objects,
-which are rendered to strings before serializing.
+`decimal.Decimal` and `uuid.UUID` are also supported and are represented as strings.
+TOML preserves native date and time values. JSON, YAML, and CSV serialize dates,
+times, and datetimes as ISO 8601 strings.
 
 There is also special handling for the Django `HTTPRequest` object, which is converted
 to a dict before serializing. The contents of that dict are:
@@ -30,15 +47,15 @@ to a dict before serializing. The contents of that dict are:
 }
 ```
 
-To then make use of context within a Typst template you must parse the incoming TOML
-data by adding the following to the top of the Typst file:
+To use context within a Typst template, parse the incoming data with the function
+for the selected encoder. For example, a TOML template begins with:
 
 ```typst
 #let ctx = toml(bytes(sys.inputs.context))
 ```
 
-This will deserialize the context and assign it to the Typst variable `ctx` which can
-then be used in the template like any other variable. For example if you context was
+This assigns the parsed context to the Typst variable `ctx`, which can then be used
+in the template like any other variable. For example, if your context was
 something like:
 
 ```python
@@ -72,39 +89,17 @@ This version sets a default if `context` isn't passed in. This allows you to tes
 template in isolation - say with the [Tinymist] Extension to VSCode or even just running
 `typst` directly on it.
 
-## Extending TOML Serialization
+## Extending context encoders
 
-If you want the serialization to transparently handle addition types you can register
-custom encoder functions with tomlkit.
+Register custom value encoders on an encoder instance to support application-specific
+types. See the [context encoder reference][context-encoders] for the interface and
+registration example. The registration belongs to that instance, so use the same
+instance configured by `CONTEXT_ENCODER`.
 
-For example the follow code snippet would add handling of a type called `Widget` that
-has a `code` property.
-
-```python
-import tomlkit
-from tomlkit import exceptions, items
-
-
-def widget_encoder(o: typing.Any) -> items.Item:
-    """
-    A tomlkit encoder for objects that should just be serialized as strings
-    """
-    if isinstance(o, Widget):
-        return items.String.from_raw(str(widget.code))
-    raise exceptions.ConvertError
-
-tomlkit.register_encoder(widget_encoder)
-```
-
-Note the at the end of the snippet above, there is an explicit registration of the new
-widget encoder. You must make sure that the code executes the registration before you
-can use it.
-
-Take a look at [`django_typst/encoding.py`][encoding] for more examples.
+CSV contexts must be a list of mappings with identical string field names. Nested
+dictionaries and lists can't be placed in CSV cells.
 
 <!-- Links -->
 
-[encoding]: https://github.com/a-musing-moose/django-typst-engine/blob/main/src/django_typst/encoding.py
+[context-encoders]: ../reference/context-encoders.md
 [tinymist]: https://github.com/Myriad-Dreamin/tinymist
-[toml]: https://toml.io/en/
-[tomlkit]: https://tomlkit.readthedocs.io/en/latest/

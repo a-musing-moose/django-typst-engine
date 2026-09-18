@@ -33,6 +33,7 @@ TEMPLATES = [
             "IGNORE_SYSTEM_FONTS": False,
             "PDF_STANDARD": "1.7",
             "PPI": None,
+            "CONTEXT_ENCODER": "django_typst.encoding.TomlContextEncoder",
         }
     },
 ]
@@ -51,9 +52,17 @@ alternative be provided.
 | IGNORE_SYSTEM_FONTS | Only consider fonts in the defined font paths  | `False`  |
 | PDF_STANDARD        | PDF revision to target (`1.7`, `a2-b`, `a3-b`) | `"1.7"`  |
 | PPI                 | Pixel Per Inch for included PNG                | `None`   |
+| CONTEXT_ENCODER     | Dotted path to the context encoder class       | TOML     |
 
 \* _The engine with use the folder the template is in as the root if one isn't
 specified._
+
+`CONTEXT_ENCODER` controls how Django context data is transferred to Typst. The
+default TOML encoder maintains compatibility with earlier releases. Built-in
+alternatives are `django_typst.encoding.JsonContextEncoder`,
+`django_typst.encoding.YamlContextEncoder`, and
+`django_typst.encoding.CsvContextEncoder`. See [handling context][context] for
+the matching Typst template setup and format limitations.
 
 !!! note
 
@@ -84,3 +93,4 @@ class MyTemplateView(generic.TemplateView):
 
 [django]: https://www.djangoproject.com/
 [typst]: https://typst.app/
+[context]: guides/context.md
