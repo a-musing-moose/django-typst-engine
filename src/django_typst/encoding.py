@@ -1,5 +1,7 @@
 import abc
+import datetime
 import decimal
+import json
 import typing
 import uuid
 
@@ -64,6 +66,15 @@ def stringable_value_encoder(value: typing.Any) -> str:
     raise EncoderCannotHandleValue
 
 
+def isoformat_value_encoder(value: typing.Any) -> str:
+    """
+    Convert temporal values to the ISO 8601 strings used by text encoders.
+    """
+    if isinstance(value, (datetime.date, datetime.time, datetime.datetime)):
+        return value.isoformat()
+    raise EncoderCannotHandleValue
+
+
 def request_value_encoder(value: typing.Any) -> dict[str, typing.Any]:
     """
     Convert Django HttpRequest objects into a context mapping.
@@ -99,3 +110,17 @@ class TomlContextEncoder(ContextEncoder):
 
     def encode(self, context: dict[str, typing.Any]) -> str:
         return tomlkit.dumps(self.encode_value(context))
+
+
+class JsonContextEncoder(ContextEncoder):
+    """
+    Serialize a Django template context as JSON.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        register_default_value_encoders(self)
+        self.register_encoder(isoformat_value_encoder)
+
+    def encode(self, context: dict[str, typing.Any]) -> str:
+        return json.dumps(self.encode_value(context))
