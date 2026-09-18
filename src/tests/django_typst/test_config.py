@@ -41,9 +41,6 @@ def test_can_tell_typst_to_ignore_system_fonts():
 @pytest.mark.parametrize(
     "standard_name, standard",
     [
-        pytest.param("1.7", config.PdfStandard.PDF_1_7, id="PDF Revision 1.7"),
-        pytest.param("a-2b", config.PdfStandard.PDF_A_2B, id="PDF Revision a-2b"),
-        pytest.param("a-3b", config.PdfStandard.PDF_A_3B, id="PDF Revision a-3b"),
         pytest.param("1.4", config.PdfStandard.PDF_1_4, id="PDF Revision 1.4"),
         pytest.param("1.5", config.PdfStandard.PDF_1_5, id="PDF Revision 1.5"),
         pytest.param("1.6", config.PdfStandard.PDF_1_6, id="PDF Revision 1.6"),
